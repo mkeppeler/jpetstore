@@ -26,3 +26,10 @@ We truncate at 53 chars because some Kubernetes name fields are limited to 63 (b
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s_%s" .Release.Name $name | trunc 53 | trimSuffix "-" | replace "-" "_" | upper -}}
 {{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "jpetstoreapp.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
