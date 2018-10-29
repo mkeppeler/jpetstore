@@ -16,4 +16,4 @@ spec:
     release: {{ .Release.Name }}
   ports:
   - port: 80
-    targetPort:9080
+    targetPort: 9080
