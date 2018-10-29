@@ -13,8 +13,7 @@ image:
     requests:
       memory: 300Mi
       cpu: 200m
-service:
-  name: Node
-  type: NodePort
-  servicePort: 9080
-  servicePortHttps: 9443
+ingress:
+  enabled: true
+  hosts:
+    - jpetstore.10.139.67.63.nip.io
