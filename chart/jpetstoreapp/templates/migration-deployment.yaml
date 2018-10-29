@@ -5,29 +5,36 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 
 metadata:
-  name: "{{ template "fullname" . }}-deployment"
+  name: "{{ template "fullname" . }}-jpetstoreweb"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    app: {{ template "modernpets.name" . }}-jpetstoreweb
+    chart: {{ template "modernpets.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   template:
     metadata:
       labels:
-        app: "{{ template "fullname" . }}-selector"
-        version: "current"
+        app: "{{ template "fullname" . }}-jpetstoreweb"
+        release: {{ .Release.Name }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-jpetstoreweb
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: WLP_LOGGING_CONSOLE_FORMAT
-              value: json
-            - name: WLP_LOGGING_CONSOLE_LOGLEVEL
-              value: info
-            - name: WLP_LOGGING_CONSOLE_SOURCE
-              value: message,trace,accessLog,ffdc
+            - name: VERSION
+              value: "1"
+          ports:
+          - containerPort: 9080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9080
+            initialDelaySeconds: 10
+            periodSeconds: 5
           resources:
             requests:
               cpu: "{{ .Values.image.resources.requests.cpu }}"
