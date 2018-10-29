@@ -6,13 +6,14 @@ kind: Service
 metadata:
   name: "web"
   labels:
+    app: "{{ template "jpetstoreapp.name" . }}-jpetstoreweb"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  type: {{ .Values.service.type }}
+  selector:
+    app: "{{ template "jpetstoreapp.name" . }}-jpetstoreweb"
+    release: {{ .Release.Name }}
   ports:
   - port: 80
-    targetPort: 9080
-  selector:
-    app: "{{ template "fullname" . }}-jpetstoreweb"
+    targetPort:9080
