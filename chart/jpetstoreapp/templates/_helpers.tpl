@@ -5,7 +5,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "name" -}}
+{{- define "jpetstoreapp.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 53 | trimSuffix "-" -}}
 {{- end -}}
 
